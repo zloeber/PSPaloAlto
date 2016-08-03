@@ -1,0 +1,17 @@
+﻿TOPIC
+    about_PSPaloAlto
+
+SHORT DESCRIPTION
+    Several functions for interfacing with the XLM interface of Palo Alto firewalls
+
+LONG DESCRIPTION
+    Several functions for interfacing with the XLM interface of Palo Alto firewalls
+
+EXAMPLES
+    TBD
+
+KEYWORDS
+    Palo_Alto,Firewall,API,Security
+
+SEE ALSO
+    https://github.com/zloeber/PSPaloAlto
