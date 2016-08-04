@@ -1,5 +1,6 @@
 
 # Use this variable for any path-sepecific actions (like loading dlls and such) to ensure it will work in testing and after being built
+<#
 $MyModulePath = $(
     Function Get-ScriptPath {
         $Invocation = (Get-Variable MyInvocation -Scope 1).Value
@@ -19,7 +20,7 @@ $MyModulePath = $(
 
     Get-ScriptPath
 )
-
+#>
 
 #region Module Cleanup
 $ExecutionContext.SessionState.Module.OnRemove = {
