@@ -1,25 +1,24 @@
 ﻿function Get-PaConnectionString {
 	<#
 	.SYNOPSIS
-		Connects to a Palo Alto firewall and generates a connection object for use with this module.
+		Creates a pa connection string for the specified credentials.
 	.DESCRIPTION
-		Connects to a Palo Alto firewall and returns an connection object that includes the API key, connection string, and address.
+		Creates a pa connection string for the specified credentials.
+
+    .PARAMETER Address
+		Specifies the IP or FQDN of the system to connect to.
+    .PARAMETER Cred
+        Specifiy a PSCredential object, If no credential object is specified, the user will be prompted.
 	.EXAMPLE
 		C:\PS> Connect-Pa 192.168.1.1
         https://192.168.1.1/api/?key=LUFRPT1SanJaQVpiNEg4TnBkNGVpTmRpZTRIamR4OUE9Q2lMTUJGREJXOCs3SjBTbzEyVSt6UT01
 
-        c:\PS> $global:PaConnectionArray
+        c:\PS> Get-PaConnectionString -Address 192.168.1.1 -Cred (Get-Credential)
 
         ConnectionString                 ApiKey                           Address
         ----------------                 ------                           -------
         https://192.168.1.1/api/?key=... LUFRPT1SanJaQVpiNEg4TnBkNGVpT... 192.168.1.1
-	.EXAMPLE
-		C:\PS> Connect-Pa -Address 192.168.1.1 -Cred $PSCredential
-        https://192.168.1.1/api/?key=LUFRPT1SanJaQVpiNEg4TnBkNGVpTmRpZTRIamR4OUE9Q2lMTUJGREJXOCs3SjBTbzEyVSt6UT01
-	.PARAMETER Address
-		Specifies the IP or FQDN of the system to connect to.
-    .PARAMETER Cred
-        Specifiy a PSCredential object, If no credential object is specified, the user will be prompted.
+
     .OUTPUTS
         PSObject
 	#>

@@ -22,8 +22,11 @@ $ModuleDescription = 'Several functions for interfacing with the XLM interface o
 
 # Options - These affect how your eventual build will be run.
 $OptionFormatCode = $false
-$OptionAnalyzeCode = $true
+$OptionAnalyzeCode = $false
 $OptionCombineFiles = $true
+
+# PlatyPS has been the cause of most of my build failures. This can help you isolate which functrion's CBH is causing you grief.
+$OptionRunPlatyPSVerbose = $false
 
 # Additional paths in the source module which should be copied over to the final build release
 # Example: @('.\libs','.\data')

@@ -104,7 +104,7 @@
             Process-Query $PaConnection
         } else {
             if (Test-PaConnection) {
-                foreach ($Connection in $Global:PaConnectionArray) {
+                foreach ($Connection in $script:PaConnectionArray) {
                     Process-Query $Connection.ConnectionString
                 }
             } else {

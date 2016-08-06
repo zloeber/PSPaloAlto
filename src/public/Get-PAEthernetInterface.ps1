@@ -4,26 +4,19 @@
 		Returns one or more Interface definitions from a Palo Alto firewall.
 	.DESCRIPTION
 		Returns one or more Interface definitions from a Palo Alto firewall.
-	.EXAMPLE
-        Get-PAEthernetInterface -Name 'ethernet1/1'
-        
-        Description
-        -----------
-        Returns information about the Interface named 'ethernet1/1' if it exists
-        
-	.EXAMPLE
-        Get-PAEthernetInterface
-        
-        Description
-        -----------
-        Returns information about all defined Interfaces.
-		
     .PARAMETER Name
         Query for specific interface by name. 
 	.PARAMETER PaConnection
 		Specificies the Palo Alto connection string with address and apikey. If ommitted, all connection strings stored in the module local variable from Connect-PA will be used.
     .PARAMETER Aggregate
         Target aggregate interfaces.
+        
+	.EXAMPLE
+        Get-PAEthernetInterface
+        
+        Description
+        -------------
+        Returns information about all defined Interfaces.
 	#>
 
     Param (
@@ -39,16 +32,13 @@
         # Pull in all the caller verbose,debug,info,warn and other preferences
         Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         $FunctionName = $MyInvocation.MyCommand
-        
-       
-        #$xpath = '/config/devices/entry/vsys/entry[@name=%27' + $Target + '%27]/network/interface/ethernet'
         if (-not $Aggregate) {
             $xpath = '/config/devices/entry/network/interface/ethernet'
             $inttype = 'ethernet'
         }
         else {
             $xpath = '/config/devices/entry/network/interface/aggregate-ethernet'
-             $inttype = 'aggregate-ethernet'
+            $inttype = 'aggregate-ethernet'
         }
         
         if ( -not [string]::IsNullOrEmpty($Name) ) {

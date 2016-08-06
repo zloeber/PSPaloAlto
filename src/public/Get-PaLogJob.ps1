@@ -40,13 +40,13 @@
             $url += "&action=$Action"
             $Url += "&job-id=$job"
 
-            $global:lasturl  = $url
-            $global:response = [xml]$WebClient.DownloadString($url)
-            if ($global:response.response.status -ne "success") {
-                Throw $global:response.response.result.msg
+            $script:lasturl  = $url
+            $script:response = [xml]$WebClient.DownloadString($url)
+            if ($script:response.response.status -ne "success") {
+                Throw $script:response.response.result.msg
             }
 
-            return $global:response
+            return $script:response
         }
     }
 
@@ -55,7 +55,7 @@
             Process-Query $PaConnection
         } else {
             if (Test-PaConnection) {
-                foreach ($Connection in $Global:PaConnectionArray) {
+                foreach ($Connection in $script:PaConnectionArray) {
                     Process-Query $Connection.ConnectionString
                 }
             } else {

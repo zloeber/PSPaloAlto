@@ -5,7 +5,7 @@
 	.DESCRIPTION
 		Returns list of connected Palo Altos.
 	.EXAMPLE
-		C:\PS> Get-PAConnections
+		C:\PS> Get-PAConnectionList
         
         Description
         -----------

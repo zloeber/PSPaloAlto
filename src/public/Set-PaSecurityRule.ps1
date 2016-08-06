@@ -69,7 +69,7 @@
     .PARAMETER DisableSri
     DisableSri
     .PARAMETER PaConnection
-		Specificies the Palo Alto connection string with address and apikey. If ommitted, $global:PaConnectionArray will be used
+		Specificies the Palo Alto connection string with address and apikey. If ommitted, the currently connected PAs will be used
 	#>
     
     Param (
