@@ -1,36 +1,30 @@
 ﻿function Get-PaConnectionString {
 	<#
-	.SYNOPSIS
-		Creates a pa connection string for the specified credentials.
-	.DESCRIPTION
-		Creates a pa connection string for the specified credentials.
+    .SYNOPSIS
+    Connects to a Palo Alto firewall and generates a connection object for use with this module.
+    .DESCRIPTION
+    Connects to a Palo Alto firewall and returns an connection object that includes the API key, connection string, and address.
+    .EXAMPLE
+    PS> Connect-Pa -Address 192.168.1.1 -Cred $PSCredential
 
     .PARAMETER Address
-		Specifies the IP or FQDN of the system to connect to.
+    Specifies the IP or FQDN of the system to connect to.
     .PARAMETER Cred
-        Specifiy a PSCredential object, If no credential object is specified, the user will be prompted.
-	.EXAMPLE
-		C:\PS> Connect-Pa 192.168.1.1
-        https://192.168.1.1/api/?key=LUFRPT1SanJaQVpiNEg4TnBkNGVpTmRpZTRIamR4OUE9Q2lMTUJGREJXOCs3SjBTbzEyVSt6UT01
-
-        c:\PS> Get-PaConnectionString -Address 192.168.1.1 -Cred (Get-Credential)
-
-        ConnectionString                 ApiKey                           Address
-        ----------------                 ------                           -------
-        https://192.168.1.1/api/?key=... LUFRPT1SanJaQVpiNEg4TnBkNGVpT... 192.168.1.1
-
+    Specifiy a PSCredential object, If no credential object is specified, the user will be prompted.
+    .PARAMETER IgnoreSSL
+    Ignores SSL issues
     .OUTPUTS
-        PSObject
+    PSObject
 	#>
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory=$True,Position=0)]
-        [ValidatePattern("\d+\.\d+\.\d+\.\d+|(\w\.)+\w")]
+        [Parameter( Mandatory=$True )]
         [string]$Address,
-
-        [Parameter(Mandatory=$True,Position=1)]
+        [Parameter( Mandatory=$True )]
         [alias('Credential')]
-        [System.Management.Automation.PSCredential]$Cred
+        [System.Management.Automation.PSCredential]$Cred,
+        [Parameter()]
+        [string]$IgnoreSSL
     )
 
     Begin {
@@ -41,18 +35,28 @@
 
     Process {
         $user = $cred.UserName.Replace("\","")
-        $ApiKey = Get-WebRequestAsXML "https://$Address/api/?type=keygen&user=$user&password=$($cred.getnetworkcredential().password)"
-        if ($ApiKey.response.status -eq "success") {
-            $CurrentConnection = New-Object -TypeName PsObject -Property @{
-                'Address' = $Address
-                'APIKey' = $ApiKey.response.result.key
-                'ConnectionString' = "https://$Address/api/?key=$($ApiKey.response.result.key)"
-            }
+        $password = ($cred.getnetworkcredential()).password
+        $headers = @{'X-Requested-With'='powershell'}
+        $URL = 'https://{0}/api/?type=keygen&user={1}&password={2}' -f $Address,$user,$password
+        Write-Verbose "$($FunctionName): URL = $URL"
+        if ($Script:_IgnoreSSL -or $IgnoreSSL) { Ignore-SSL }
+        try {
+            $response = Invoke-RestMethod -Headers $headers -Uri $url -Method Post -Credential $cred
+            if ($response.response.status -eq 'success') {
+                $CurrentConnection = New-Object -TypeName PsObject -Property @{
+                    'Address' = $Address
+                    'APIKey' = $response.response.result.key
+                    'ConnectionString' = "https://$Address/api/?key=$($response.response.result.key)"
+                }
 
-            return $CurrentConnection
+                return $CurrentConnection
+            }
+            else {
+                throw "$($FunctionName): HTTPS connection error $($response.response.status)"
+            }
         }
-        else {
-            throw "$($FunctionName): $($ApiKey.response.result.msg)"
+        catch {
+            throw "$($FunctionName): HTTPS connection error $($response.response.status)"
         }
     }
 }

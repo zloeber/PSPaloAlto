@@ -1,10 +1,10 @@
-﻿# Run this in an administrative PowerShell prompt to install the PSPaloAlto PowerShell module:
+# Run this in an administrative PowerShell prompt to install the PowerAlto PowerShell module:
 #
-# 	iex (New-Object Net.WebClient).DownloadString("https://github.com/zloeber/PSPaloAlto/raw/master/Install.ps1")
+# 	iex (New-Object Net.WebClient).DownloadString("https://github.com/zloeber/poweralto/raw/master/Install.ps1")
 
 # Some general variables
 $ModuleName = 'PSPaloAlto'
-$DownloadURL = 'https://github.com/zloeber/PSPaloAlto/raw/master/release/PSPaloAlto-current.zip'
+$DownloadURL = 'https://github.com/zloeber/pspaloalto/raw/master/release/PSPaloAlto-current.zip'
 
 # Download and install the module
 $webclient = New-Object System.Net.WebClient

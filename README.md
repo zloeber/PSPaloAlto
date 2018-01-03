@@ -1,4 +1,4 @@
-# PowerAlto Revised
+# PowerAlto Revised (PSPaloAlto)
 
 This is a powershell module for interacting more easily with the Palo Alto line of firewalls using their XML API interface.
 

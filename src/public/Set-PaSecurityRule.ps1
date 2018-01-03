@@ -1,21 +1,21 @@
 ﻿function Set-PaSecurityRule {
-	<#
-	.SYNOPSIS
-		Edits settings on a Palo Alto Security Rule
-	.DESCRIPTION
-		Edits settings on a Palo Alto Security Rule
-	.EXAMPLE
-        Needs to write some examples
+    <#
+    .SYNOPSIS
+    Edits settings on a Palo Alto Security Rule
+    .DESCRIPTION
+    Edits settings on a Palo Alto Security Rule
+    .EXAMPLE
+    Needs to write some examples
     .PARAMETER Name
-        Name of the rule
+    Name of the rule
     .PARAMETER Rename
-        Rename the rule
+    Rename the rule
     .PARAMETER Description
-        Rule descroption
+    Rule descroption
     .PARAMETER Tag
-        Tag
+    Tag
     .PARAMETER SourceZone
-        SourceZone
+    SourceZone
     .PARAMETER SourceAddress
     SourceAddress
     .PARAMETER SourceUser
@@ -69,9 +69,9 @@
     .PARAMETER DisableSri
     DisableSri
     .PARAMETER PaConnection
-		Specificies the Palo Alto connection string with address and apikey. If ommitted, the currently connected PAs will be used
-	#>
-    
+    Specificies the Palo Alto connection string with address and apikey. If ommitted, the currently connected PAs will be used
+    #>
+
     Param (
         [Parameter()]
         [PSObject]$PaConnection,
@@ -102,26 +102,26 @@
         [Parameter()]
         [string]$UrlCategory,
         [Parameter()]
-        [ValidateSet("yes","no")]
+        [ValidateSet("yes", "no")]
         [string]$SourceNegate,
         [Parameter()]
-        [ValidateSet("yes","no")] 
+        [ValidateSet("yes", "no")]
         [string]$DestinationNegate,
         [Parameter()]
-        [ValidateSet("allow","deny")] 
+        [ValidateSet("allow", "deny")]
         [string]$Action,
         [Parameter()]
-        [ValidateSet("yes","no")] 
+        [ValidateSet("yes", "no")]
         [string]$LogStart,
         [Parameter()]
-        [ValidateSet("yes","no")] 
+        [ValidateSet("yes", "no")]
         [string]$LogEnd,
         [Parameter()]
         [string]$LogForward,
         [Parameter()]
         [string]$Schedule,
         [Parameter()]
-        [ValidateSet("yes","no")]
+        [ValidateSet("yes", "no")]
         [string]$Disabled,
         [Parameter()]
         [string]$ProfileGroup,
@@ -138,40 +138,42 @@
         [Parameter()]
         [string]$ProfileData,
         [Parameter()]
-        [ValidateSet("none","af11","af12","af13","af21","af22","af23","af31","af32","af33","af41","af42","af43","cs0","cs1","cs2","cs3","cs4","cs5","cs6","cs7","ef")] 
+        [ValidateSet("none", "af11", "af12", "af13", "af21", "af22", "af23", "af31", "af32", "af33", "af41", "af42", "af43", "cs0", "cs1", "cs2", "cs3", "cs4", "cs5", "cs6", "cs7", "ef")]
         [string]$QosDscp,
         [Parameter()]
-        [ValidateSet("none","cs0","cs1","cs2","cs3","cs4","cs5","cs6","cs7")] 
+        [ValidateSet("none", "cs0", "cs1", "cs2", "cs3", "cs4", "cs5", "cs6", "cs7")]
         [string]$QosPrecedence,
         [Parameter()]
-        [ValidateSet("yes","no")] 
+        [ValidateSet("yes", "no")]
         [string]$DisableSri
     )
 
-    BEGIN {
+    begin {
         $WebClient = New-Object System.Net.WebClient
         [Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
 
-        function EditProperty ($parameter,$element,$xpath) {
+        function EditProperty ($parameter, $element, $xpath) {
             if ($parameter) {
                 if ($parameter -eq "none") { $action = "delete" } `
-                    else                   { $action = "edit" }
+                    else { $action = "edit" }
                 $Response = Send-PaApiQuery -Config $action -XPath $xpath -Element $element -Member $parameter
                 if ($Response.response.status -eq "success") {
                     return "$element`: success"
-                } else {
+                }
+                else {
                     throw $Response.response.msg.line
                 }
             }
         }
-        Function Process-Query ( [String]$PaConnectionString ) {
+        function Process-Query ( [String]$PaConnectionString ) {
             $xpath = "/config/devices/entry/vsys/entry/rulebase/security/rules/entry[@name='$Name']"
-            
+
             if ($Rename) {
                 $Response = Send-PaApiQuery -Config rename -XPath $xpath -NewName $Rename -PaConnection $PaConnectionString
                 if ($Response.response.status -eq "success") {
                     return "Rename success"
-                } else {
+                }
+                else {
                     throw $Response.response.msg.line
                 }
             }
@@ -209,18 +211,20 @@
         }
     }
 
-    PROCESS {
+    process {
         if ($PaConnection) {
             Process-Query $PaConnection
-        } else {
+        }
+        else {
             if (Test-PaConnection) {
                 foreach ($Connection in $Script:PaConnectionArray) {
                     Process-Query $Connection.ConnectionString
                 }
-            } else {
+            }
+            else {
                 Throw "No Connections"
             }
         }
-        
+
     }
 }

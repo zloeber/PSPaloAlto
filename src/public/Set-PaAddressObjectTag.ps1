@@ -1,23 +1,23 @@
 ﻿function Set-PaAddressObjectTag {
-	<#
-	.SYNOPSIS
-		Updates an address object's assigned tags.
-	.DESCRIPTION
-		Updates an address object's assigned tags.
-	.EXAMPLE
-        TBD
+    <#
+    .SYNOPSIS
+    Updates an address object's assigned tags.
+    .DESCRIPTION
+    Updates an address object's assigned tags.
+    .EXAMPLE
+    TBD
     .PARAMETER Name
-        Name of object to update
+    Name of object to update
     .PARAMETER Tags
-        Tags to assign
+    Tags to assign
     .PARAMETER PaConnection
-		Specificies the Palo Alto connection string with address and apikey. If ommitted, current connections will be used
+    Specificies the Palo Alto connection string with address and apikey. If ommitted, current connections will be used
     .PARAMETER Target
-        Configuration to target, either vsys1 (default) or panorama 
-	#>
+    Configuration to target, either vsys1 (default) or panorama
+    #>
     [CmdletBinding()]
     Param (
-        [Parameter(position=0, Mandatory=$True)]
+        [Parameter(position=0, Mandatory=$True,ValueFromPipeline=$True)]
         [string]$Name,
         [Parameter(position=1, Mandatory=$True)]
         [string]$Tags,
@@ -32,9 +32,9 @@
         # Pull in all the caller verbose,debug,info,warn and other preferences
         Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         $FunctionName = $MyInvocation.MyCommand
-        
+
         $Xpath = "/config/devices/entry/vsys/entry[@name='$Target']/address/entry[@name='" + $Name.replace(" ",'%20') + "']/tag"
-        
+
         if ([string]::IsNullOrEmpty($PaConnection.ConnectionString)) {
             if (($script:PaConnectionArray).Count -gt 0) {
                 Write-Verbose "$($FunctionName): Using module connection string."

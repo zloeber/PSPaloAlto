@@ -1,20 +1,20 @@
 ﻿function Update-PaSoftware {
     <#
-	.SYNOPSIS
-		Updates PanOS System Software to desired level.
-	.DESCRIPTION
-		Updates PanOS System Software to desired level.  Can do multiple stepped updated, download only and restart or not.
-	.PARAMETER PaConnection
-		Specificies the Palo Alto connection string with address and apikey. If ommitted, all connection strings stored in the module local variable from Connect-PA will be used.
+    .SYNOPSIS
+    Updates PanOS System Software to desired level.
+    .DESCRIPTION
+    Updates PanOS System Software to desired level.  Can do multiple stepped updated, download only and restart or not.
+    .PARAMETER PaConnection
+    Specificies the Palo Alto connection string with address and apikey. If ommitted, all connection strings stored in the module local variable from Connect-PA will be used.
     .PARAMETER Version
-        Version of the software to update to
+    Version of the software to update to
     .PARAMETER DownloadOnly
-        Only download the available update
+    Only download the available update
     .PARAMETER NoRestart
-        Do not restart the device after updating.
-	.EXAMPLE
-        NA
-	#>
+    Do not restart the device after updating.
+    .EXAMPLE
+    NA
+    #>
 
     Param (
         [Parameter()]
@@ -134,9 +134,9 @@
             if (($Steps.count -gt 1) -and ($NoRestart)) {
                 Throw "Must use -Restart for multiple steps"
             }
-            
+
             $status = 0
-            if ($DownloadOnly)      { $Total = ($Steps.count) } 
+            if ($DownloadOnly)      { $Total = ($Steps.count) }
                 elseif ($NoRestart) { $Total = ($Steps.count)*2 }
                 else                { $Total = ($Steps.count)*3 }
 
@@ -144,7 +144,7 @@
 
             foreach ($s in $Steps) {
                 $pacom = $false
-                
+
                 while (!($pacom)) {
                     $Download += Download-Update $s
                 }
@@ -155,9 +155,9 @@
             sleep 5
 
             if ($DownloadOnly) { return $Download }
-            
-            
-            
+
+
+
             foreach ($s in $Steps) {
                 $pacom = $false
                 Write-Progress -Activity "Updating Software $Status/$Total" -Status "$($Status + 1)/$Total`: installing $s" -id 1 -PercentComplete $Progress
@@ -172,7 +172,7 @@
                     Restart-PaSystem -i 2 -p 1
                     $Status++
                     $Progress = ($Status / $total) * 100
-                    
+
                 }
                 Write-Progress -Activity "Updating Software $Status/$Total" -Status "Restarting" -id 1 -PercentComplete $Progress
             }

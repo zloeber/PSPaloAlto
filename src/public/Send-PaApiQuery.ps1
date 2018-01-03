@@ -1,29 +1,29 @@
 ﻿function Send-PaApiQuery {
-	<#
-	.SYNOPSIS
-		Formulate and send an api query to a PA firewall.
-	.DESCRIPTION
-		Formulate and send an api query to a PA firewall.
+    <#
+    .SYNOPSIS
+    Formulate and send an api query to a PA firewall.
+    .DESCRIPTION
+    Formulate and send an api query to a PA firewall.
     .PARAMETER Config
-        Type of configuration query to send: show, get, set, edit, delete, rename, clone, or move.
+    Type of configuration query to send: show, get, set, edit, delete, rename, clone, or move.
     .PARAMETER XPath
-        XPath to query
+    XPath to query
     .PARAMETER Element
-        Element to query
+    Element to query
     .PARAMETER Member
-        Member to query
+    Member to query
     .PARAMETER NewName
-        NewName
+    NewName
     .PARAMETER CloneFrom
-        CloneFrom
+    CloneFrom
     .PARAMETER MoveWhere
-        MoveWhere
+    MoveWhere
     .PARAMETER MoveDestination
-        MoveDestination
+    MoveDestination
     .PARAMETER Op
-        Operator to use
+    Operator to use
     .PARAMETER Report
-        Report
+    Report
     .PARAMETER ReportName
     ReportName
     .PARAMETER Rows
@@ -88,218 +88,218 @@
     Force
     .PARAMETER Partial
     Partial
-	.PARAMETER PaConnection
-		Specificies the Palo Alto connection string with address and apikey. If ommitted, current connections will be used
+    .PARAMETER PaConnection
+    Specificies the Palo Alto connection string with address and apikey. If ommitted, current connections will be used
     .EXAMPLE
-        TBD
-	#>
+    TBD
+    #>
     Param (
         #############################CONFIG#############################
 
-        [Parameter(ParameterSetName="config",Mandatory=$True,Position=0)]
-        [ValidateSet("show","get","set","edit","delete","rename","clone","move")]
+        [Parameter(ParameterSetName = "config", Mandatory = $True, Position = 0)]
+        [ValidateSet("show", "get", "set", "edit", "delete", "rename", "clone", "move")]
         [String]$Config,
 
-        [Parameter(ParameterSetName="config",Mandatory=$True)]
+        [Parameter(ParameterSetName = "config", Mandatory = $True)]
         [ValidatePattern("\/config\/.*")]
         [String]$XPath,
 
-        [Parameter(ParameterSetName="config")]
+        [Parameter(ParameterSetName = "config")]
         [alias('e')]
         [String]$Element,
 
-        [Parameter(ParameterSetName="config")]
+        [Parameter(ParameterSetName = "config")]
         [alias('m')]
         [String]$Member,
 
-        [Parameter(ParameterSetName="config")]
+        [Parameter(ParameterSetName = "config")]
         [alias('nn')]
         [String]$NewName,
 
-            #========================CLONE=========================#
+        #========================CLONE=========================#
 
-        [Parameter(ParameterSetName="config")]
+        [Parameter(ParameterSetName = "config")]
         [alias('cf')]
         [String]$CloneFrom,
 
-            #=========================MOVE=========================#
+        #=========================MOVE=========================#
 
-        [Parameter(ParameterSetName="config")]
+        [Parameter(ParameterSetName = "config")]
         [alias('mw')]
-        [ValidateSet("after","before","top","bottom")] 
+        [ValidateSet("after", "before", "top", "bottom")]
         [String]$MoveWhere,
 
-        [Parameter(ParameterSetName="config")]
+        [Parameter(ParameterSetName = "config")]
         [alias('dst')]
         [String]$MoveDestination,
 
         ###########################OPERATIONAL##########################
 
-        [Parameter(ParameterSetName="op",Mandatory=$True,Position=0)]
+        [Parameter(ParameterSetName = "op", Mandatory = $True, Position = 0)]
         [ValidatePattern("<\w+>.*<\/\w+>")]
         [String]$Op,
 
         #############################REPORT#############################
 
-        [Parameter(ParameterSetName="report",Mandatory=$True,Position=0)]
-        [ValidateSet("dynamic","predefined")]
+        [Parameter(ParameterSetName = "report", Mandatory = $True, Position = 0)]
+        [ValidateSet("dynamic", "predefined")]
         #No Custom Reports supported yet, should probably make a seperate cmdlet for it.
         [String]$Report,
 
-        [Parameter(ParameterSetName="report")]
+        [Parameter(ParameterSetName = "report")]
         [alias('rn')]
         [String]$ReportName,
 
-        [Parameter(ParameterSetName="report")]
+        [Parameter(ParameterSetName = "report")]
         [alias('r')]
         [Decimal]$Rows,
 
-        [Parameter(ParameterSetName="report")]
+        [Parameter(ParameterSetName = "report")]
         [alias('p')]
-        [ValidateSet("last-60-seconds","last-15-minutes","last-hour","last-12-hrs","last-24-hrs","last-calendar-day","last-7-days","last-7-calendar-days","last-calendar-week","last-30-days")] 
+        [ValidateSet("last-60-seconds", "last-15-minutes", "last-hour", "last-12-hrs", "last-24-hrs", "last-calendar-day", "last-7-days", "last-7-calendar-days", "last-calendar-week", "last-30-days")]
         [String]$Period,
 
-        [Parameter(ParameterSetName="report")]
+        [Parameter(ParameterSetName = "report")]
         [alias('start')]
         [ValidatePattern("\d{4}\/\d{2}\/\d{2}\+\d{2}:\d{2}:\d{2}")]
         [String]$StartTime,
 
-        [Parameter(ParameterSetName="report")]
+        [Parameter(ParameterSetName = "report")]
         [alias('end')]
         [ValidatePattern("\d{4}\/\d{2}\/\d{2}\+\d{2}:\d{2}:\d{2}")]
         [String]$EndTime,
 
         #############################EXPORT#############################
 
-        [Parameter(ParameterSetName="export",Mandatory=$True,Position=0)]
-        [ValidateSet("application-pcap","threat-pcap","filter-pcap","filters-pcap","configuration","certificate","high-availability-key","key-pair","application-block-page","captive-portal-text","file-block-continue-page","file-block-page","global-protect-portal-custom-help-page","global-protect-portal-custom-login-page","global-protect-portal-custom-welcome-page","ssl-cert-status-page","ssl-optout-text","url-block-page","url-coach-text","virus-block-page","tech-support","device-state")]
+        [Parameter(ParameterSetName = "export", Mandatory = $True, Position = 0)]
+        [ValidateSet("application-pcap", "threat-pcap", "filter-pcap", "filters-pcap", "configuration", "certificate", "high-availability-key", "key-pair", "application-block-page", "captive-portal-text", "file-block-continue-page", "file-block-page", "global-protect-portal-custom-help-page", "global-protect-portal-custom-login-page", "global-protect-portal-custom-welcome-page", "ssl-cert-status-page", "ssl-optout-text", "url-block-page", "url-coach-text", "virus-block-page", "tech-support", "device-state")]
         [String]$Export,
 
-        [Parameter(ParameterSetName="export")]
+        [Parameter(ParameterSetName = "export")]
         [alias('f')]
         [String]$From,
 
-        [Parameter(ParameterSetName="export")]
+        [Parameter(ParameterSetName = "export")]
         [alias('t')]
         [String]$To,
 
-            #=========================DLP=========================#
+        #=========================DLP=========================#
 
-        [Parameter(ParameterSetName="export")]
+        [Parameter(ParameterSetName = "export")]
         [alias('dp')]
         [String]$DlpPassword,
 
-            #=====================CERTIFICATE=====================#
+        #=====================CERTIFICATE=====================#
 
-        [Parameter(ParameterSetName="export")]
+        [Parameter(ParameterSetName = "export")]
         [alias('ecn')]
         [String]$CertificateName,
 
-        [Parameter(ParameterSetName="export")]
+        [Parameter(ParameterSetName = "export")]
         [alias('ecf')]
-        [ValidateSet("pkcs12","pem")]
+        [ValidateSet("pkcs12", "pem")]
         [String]$CertificateFormat,
 
-        [Parameter(ParameterSetName="export")]
+        [Parameter(ParameterSetName = "export")]
         [alias('epp')]
         [String]$ExportPassPhrase,
 
-            #=====================TECH SUPPORT====================#
+        #=====================TECH SUPPORT====================#
 
-        [Parameter(ParameterSetName="export")]
+        [Parameter(ParameterSetName = "export")]
         [alias('ta')]
-        [ValidateSet("status","get","finish")]
+        [ValidateSet("status", "get", "finish")]
         [String]$TsAction,
 
-        [Parameter(ParameterSetName="export")]
+        [Parameter(ParameterSetName = "export")]
         [alias('j')]
         [Decimal]$Job,
 
-        [Parameter(ParameterSetName="export",Mandatory=$True)]
+        [Parameter(ParameterSetName = "export", Mandatory = $True)]
         [alias('ef')]
         [String]$ExportFile,
 
 
         #############################IMPORT#############################
 
-        [Parameter(ParameterSetName="import",Mandatory=$True,Position=0)]
-        [ValidateSet("software","anti-virus","content","url-database","signed-url-database","license","configuration","certificate","high-availability-key","key-pair","application-block-page","captive-portal-text","file-block-continue-page","file-block-page","global-protect-portal-custom-help-page","global-protect-portal-custom-login-page","global-protect-portal-custom-welcome-page","ssl-cert-status-page","ssl-optout-text","url-block-page","url-coach-text","virus-block-page","global-protect-client","custom-logo")]
+        [Parameter(ParameterSetName = "import", Mandatory = $True, Position = 0)]
+        [ValidateSet("software", "anti-virus", "content", "url-database", "signed-url-database", "license", "configuration", "certificate", "high-availability-key", "key-pair", "application-block-page", "captive-portal-text", "file-block-continue-page", "file-block-page", "global-protect-portal-custom-help-page", "global-protect-portal-custom-login-page", "global-protect-portal-custom-welcome-page", "ssl-cert-status-page", "ssl-optout-text", "url-block-page", "url-coach-text", "virus-block-page", "global-protect-client", "custom-logo")]
         [String]$Import,
 
-        [Parameter(ParameterSetName="import",Mandatory=$True,Position=1)]
+        [Parameter(ParameterSetName = "import", Mandatory = $True, Position = 1)]
         [String]$ImportFile,
 
-            #=====================CERTIFICATE=====================#
+        #=====================CERTIFICATE=====================#
 
-        [Parameter(ParameterSetName="import")]
+        [Parameter(ParameterSetName = "import")]
         [alias('icn')]
         [String]$ImportCertificateName,
 
-        [Parameter(ParameterSetName="import")]
+        [Parameter(ParameterSetName = "import")]
         [alias('icf')]
-        [ValidateSet("pkcs12","pem")]
+        [ValidateSet("pkcs12", "pem")]
         [String]$ImportCertificateFormat,
 
-        [Parameter(ParameterSetName="import")]
+        [Parameter(ParameterSetName = "import")]
         [alias('ipp')]
         [String]$ImportPassPhrase,
 
-            #====================RESPONSE PAGES====================#
+        #====================RESPONSE PAGES====================#
 
-        [Parameter(ParameterSetName="import")]
+        [Parameter(ParameterSetName = "import")]
         [alias('ip')]
         [String]$ImportProfile,
 
-            #=====================CUSTOM LOGO======================#
+        #=====================CUSTOM LOGO======================#
 
-        [Parameter(ParameterSetName="import")]
+        [Parameter(ParameterSetName = "import")]
         [alias('wh')]
-        [ValidateSet("login-screen","main-ui","pdf-report-footer","pdf-report-header")]
+        [ValidateSet("login-screen", "main-ui", "pdf-report-footer", "pdf-report-header")]
         [String]$ImportWhere,
 
         ##############################LOGS##############################
 
-        [Parameter(ParameterSetName="log",Mandatory=$True,Position=0)]
-        [ValidateSet("traffic","threat","config","system","hip-match","get","finish")]
+        [Parameter(ParameterSetName = "log", Mandatory = $True, Position = 0)]
+        [ValidateSet("traffic", "threat", "config", "system", "hip-match", "get", "finish")]
         [String]$Log,
 
-        [Parameter(ParameterSetName="log")]
+        [Parameter(ParameterSetName = "log")]
         [alias('q')]
         [String]$LogQuery,
 
-        [Parameter(ParameterSetName="log")]
+        [Parameter(ParameterSetName = "log")]
         [alias('nl')]
-        [ValidateRange(1,5000)]
+        [ValidateRange(1, 5000)]
         [Decimal]$NumberLogs,
 
-        [Parameter(ParameterSetName="log")]
+        [Parameter(ParameterSetName = "log")]
         [alias('sl')]
         [String]$SkipLogs,
 
-        [Parameter(ParameterSetName="log")]
+        [Parameter(ParameterSetName = "log")]
         [alias('la')]
-        [ValidateSet("get","finish")]
+        [ValidateSet("get", "finish")]
         [String]$LogAction,
 
-        [Parameter(ParameterSetName="log")]
+        [Parameter(ParameterSetName = "log")]
         [alias('lj')]
         [Decimal]$LogJob,
 
         #############################USER-ID############################
 
-        [Parameter(ParameterSetName="userid",Mandatory=$True,Position=0)]
-        [ValidateSet("get","set")] 
+        [Parameter(ParameterSetName = "userid", Mandatory = $True, Position = 0)]
+        [ValidateSet("get", "set")]
         [String]$UserId,
 
         #############################COMMIT#############################
 
-        [Parameter(ParameterSetName="commit",Mandatory=$True,Position=0)]
+        [Parameter(ParameterSetName = "commit", Mandatory = $True, Position = 0)]
         [Switch]$Commit,
 
-        [Parameter(ParameterSetName="commit")]
+        [Parameter(ParameterSetName = "commit")]
         [Switch]$Force,
 
-        [Parameter(ParameterSetName="commit")]
+        [Parameter(ParameterSetName = "commit")]
         [alias('part')]
         [String]$Partial,
 
@@ -314,7 +314,7 @@
         # Pull in all the caller verbose,debug,info,warn and other preferences
         Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         $FunctionName = $MyInvocation.MyCommand
-        
+
         if ([string]::IsNullOrEmpty($PaConnection.ConnectionString)) {
             if (($script:PaConnectionArray).Count -gt 0) {
                 Write-Verbose "$($FunctionName): Using existing connections to $(($script:PaConnectionArray).Count) Firewalls."
@@ -339,13 +339,13 @@
                     $url += "&type=config"
                     $url += "&action=$Config"
                     $url += "&xpath=$xpath"
-                    if (($Config -eq "set") -or ($Config -eq "edit")-or ($Config -eq "delete")) {
+                    if (($Config -eq "set") -or ($Config -eq "edit") -or ($Config -eq "delete")) {
                         #if ($Element) { $url += "/$Element" }
                         $Members = ''
                         if ($Member) {
-                            $Member = $Member.replace(" ",'%20')
-#                        if ($Member -match ",") {
-                        
+                            $Member = $Member.replace(" ", '%20')
+                            #                        if ($Member -match ",") {
+
                             foreach ($Value in $Member.split(',')) {
                                 if ($Value) { $Members += "<member>$Value</member>" }
                             }
@@ -357,14 +357,17 @@
                         elseif ($Member -ne '') {
                             $url += "&element=$Member"
                         }
-                    } elseif ($Config -eq "rename") {
+                    }
+                    elseif ($Config -eq "rename") {
                         $url += "&newname=$NewName"
-                    } elseif ($Config -eq "clone") {
+                    }
+                    elseif ($Config -eq "clone") {
                         $url += "/"
                         $url += "&from=$xpath/$CloneFrom"
                         $url += "&newname=$NewName"
                         return "Times out ungracefully as of 11/20/12 on 5.0.0"
-                    } elseif ($Config -eq "move") {
+                    }
+                    elseif ($Config -eq "move") {
                         $url += "&where=$MoveWhere"
                         if ($MoveDestination) {
                             $url += "&dst=$MoveDestination"
@@ -391,8 +394,9 @@
                     if ($ReportName) { $url += "&reportname=$ReportName" }
                     if ($Rows) { $url += "&topn=$Rows" }
                     if ($Period) {
-                        $url+= "&period=$Period"
-                    } elseif ($StartTime) {
+                        $url += "&period=$Period"
+                    }
+                    elseif ($StartTime) {
                         $url += "&starttime=$StartTime"
                         if ($EndTime) { $url += "&starttime=$EndTime" }
                     }
@@ -446,19 +450,20 @@
                     if ($Log -eq "get") {
                         $url += "&action=$log"
                         $url += "&job-id=$LogJob"
-                    } else {
+                    }
+                    else {
                         $url += "&log-type=$Log"
                     }
 
-                    
+
                     if ($LogQuery) {
-                        $Query  = [System.Web.HttpUtility]::UrlEncode($LogQuery)
-                        $url   += "&query=$Query"
+                        $Query = [System.Web.HttpUtility]::UrlEncode($LogQuery)
+                        $url += "&query=$Query"
                     }
                     if ($NumberLogs) { $url += "&nlogs=$NumberLogs" }
                     if ($SkipLogs) { $url += "&skip=$SkipLogs" }
 
-                    $script:LastURL  = $url
+                    $script:LastURL = $url
                     $script:LastResponse = Get-WebRequestAsXML $url
 
                     $script:LastResponse

@@ -1,18 +1,16 @@
 ﻿function Update-PaContent {
     <#
-	.SYNOPSIS
-		Updates Pa Content files.
-	.DESCRIPTION
-		Updates Pa Content files.
-	.PARAMETER PaConnection
-		Specificies the Palo Alto connection string with address and apikey. If ommitted, all connection strings stored in the module local variable from Connect-PA will be used.
-	.EXAMPLE
-        Update-PaContent
-        
-        Description
-        -------------
-        Updates the content files of the currently connected Palo Alto firewalls.
-	#>
+    .SYNOPSIS
+    Updates Pa Content files.
+    .DESCRIPTION
+    Updates Pa Content files.
+    .PARAMETER PaConnection
+    Specificies the Palo Alto connection string with address and apikey. If ommitted, all connection strings stored in the module local variable from Connect-PA will be used.
+    .EXAMPLE
+    PS> Update-PaContent
+
+    Updates the content files of the currently connected Palo Alto firewalls.
+    #>
 
     Param (
         [Parameter(Mandatory=$False)]
@@ -28,12 +26,12 @@
             Write-Verbose "checking for new content"
             $ContentUpdate = Send-PaApiQuery -Op $xpath
             if ($ContentUpdate.response.status -ne "success") { throw $ContentUpdate.response.msg }
-            if ($ContentUpdate.response.result."content-updates".entry.current -eq "no") {            
+            if ($ContentUpdate.response.result."content-updates".entry.current -eq "no") {
                 if ($ContentUpdate.response.result."content-updates".entry.downloaded -eq "no") {
                     $xpath = "<request><content><upgrade><download><latest></latest></download></upgrade></content></request>"
                     $ContentDownload = Send-PaApiQuery -Op $xpath
                     if ($ContentDownload.response.status -ne "success") { throw $ContentDownload.response.msg }
-                    
+
                     $job = $ContentDownload.response.result.job
                     $size = [Decimal]($ContentUpdate.response.result."content-updates".entry.size)
                     $Version = $ContentUpdate.response.result."content-updates".entry.version
@@ -47,12 +45,12 @@
                 $ContentInstall = Send-PaApiQuery -Op $xpath
                 $Job = $ContentInstall.response.result.job
                 $Status = Watch-PaJob -Job $job -c "Installing content $Version"
-                
+
                 if ($Status.response.result.job.details.Line.newjob.nextjob) {
                     $Job = $Status.response.result.job.details.Line.newjob.nextjob
                     $Status = Watch-PaJob -Job $job -c "New content push"
                 }
-            } 
+            }
             else {
                 $UpToDate = $true
                 Write-Verbose "content already installed"
@@ -68,7 +66,7 @@
                     $xpath = "<request><anti-virus><upgrade><download><latest></latest></download></upgrade></anti-virus></request>"
                     $AvDownload = Send-PaApiQuery -Op $xpath
                     if ($AvDownload.response.status -ne "success") { throw $AvDownload.response.msg }
-                    
+
                     $job = $AvDownload.response.result.job
                     $size = [Decimal]($AvUpdate.response.result."content-updates".entry.size)
                     $Version = $AvUpdate.response.result."content-updates".entry.version
@@ -81,11 +79,11 @@
                 $xpath = "<request><anti-virus><upgrade><install><version>latest</version></install></upgrade></anti-virus></request>"
                 $AvInstall = Send-PaApiQuery -Op $xpath
                 if ($AvInstall.response.status -ne "success") { throw $AvInstall.response.msg }
-                
+
                 $job = $AvInstall.response.result.job
                 $Status = Watch-PaJob -Job $Job -c "Installing antivirus $Version"
                 if ($Status.response.status -ne "success") { throw $Status.response.msg }
-                
+
                 if ($status.response.result.job.details.line.newjob.nextjob) {
                     $Job = $status.response.result.job.details.line.newjob.nextjob
                     $Status = Watch-PaJob -Job $job -c "pushing antivirus"
@@ -98,7 +96,7 @@
             return $UpToDate
         }
     }
-    
+
     PROCESS {
         if ($PaConnection) {
             Process-Query $PaConnection

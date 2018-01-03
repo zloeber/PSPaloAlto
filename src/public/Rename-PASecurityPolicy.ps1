@@ -1,19 +1,19 @@
 ﻿function Rename-PaSecurityPolicy {
-	<#
-	.SYNOPSIS
-		Renames existing security policy on the targeted PA.
-	.DESCRIPTION
-		Renames existing security policy on the targeted PA.
-	.EXAMPLE
-        TBD
+    <#
+    .SYNOPSIS
+    Renames existing security policy on the targeted PA.
+    .DESCRIPTION
+    Renames existing security policy on the targeted PA.
+    .EXAMPLE
+    TBD
     .PARAMETER Name
-        Current object name
+    Current object name
     .PARAMETER NewName
-        New object name
-	.PARAMETER PaConnection
-		Specificies the Palo Alto connection string with address and apikey. If ommitted, current connections will be used
+    New object name
+    .PARAMETER PaConnection
+    Specificies the Palo Alto connection string with address and apikey. If ommitted, current connections will be used
     .PARAMETER Target
-        Configuration to target, either vsys1 (default) or panorama 
+    Configuration to target, either vsys1 (default) or panorama
 	#>
     [CmdletBinding()]
     Param (
@@ -33,9 +33,9 @@
         # Pull in all the caller verbose,debug,info,warn and other preferences
         Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         $FunctionName = $MyInvocation.MyCommand
-        
+
         $Xpath = "/config/devices/entry/vsys/entry[@name='$Target']/rulebase/security/rules/entry[@name='" + $Name.replace(" ",'%20') + "']"
-        
+
         if ([string]::IsNullOrEmpty($PaConnection.ConnectionString)) {
             if (($script:PaConnectionArray).Count -gt 0) {
                 Write-Verbose "$($FunctionName): Using module connection string."

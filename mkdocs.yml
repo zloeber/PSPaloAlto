@@ -1,0 +1,41 @@
+﻿use_directory_urls: false
+site_author: Zachary Loeber
+copyright: PowerAlto is licensed under <a href='https://github.com/zloeber/poweralto/blob/master/License.md'>this</a> license
+theme: readthedocs
+site_name: PowerAlto Docs
+pages:
+- Acknowledgements: Acknowledgements.md
+- ChangeLog: ChangeLog.md
+- Contributing: Contributing.md
+- Index: Index.md
+- Functions:
+  - Connect-PA: Functions/Connect-PA.md
+  - Convert-OutputForCSV: Functions/Convert-OutputForCSV.md
+  - Get-PAAddressGroup: Functions/Get-PAAddressGroup.md
+  - Get-PaAddressObject: Functions/Get-PaAddressObject.md
+  - Get-PAConnectionList: Functions/Get-PAConnectionList.md
+  - Get-PaConnectionString: Functions/Get-PaConnectionString.md
+  - Get-PAEthernetInterface: Functions/Get-PAEthernetInterface.md
+  - Get-PAHighAvailability: Functions/Get-PAHighAvailability.md
+  - Get-PALastResponse: Functions/Get-PALastResponse.md
+  - Get-PALastURL: Functions/Get-PALastURL.md
+  - Get-PaLogJob: Functions/Get-PaLogJob.md
+  - Get-PaNatPolicy: Functions/Get-PaNatPolicy.md
+  - Get-PaSecurityPolicy: Functions/Get-PaSecurityPolicy.md
+  - Get-PaSystemInfo: Functions/Get-PaSystemInfo.md
+  - Get-PAZone: Functions/Get-PAZone.md
+  - Invoke-PACommit: Functions/Invoke-PACommit.md
+  - New-PaLogJob: Functions/New-PaLogJob.md
+  - Rename-PaAddressObject: Functions/Rename-PaAddressObject.md
+  - Rename-PANATPolicy: Functions/Rename-PANATPolicy.md
+  - Rename-PaSecurityPolicy: Functions/Rename-PaSecurityPolicy.md
+  - Send-PaApiQuery: Functions/Send-PaApiQuery.md
+  - Set-PaAddressObject: Functions/Set-PaAddressObject.md
+  - Set-PaAddressObjectTag: Functions/Set-PaAddressObjectTag.md
+  - Set-PaSecurityRule: Functions/Set-PaSecurityRule.md
+  - Test-PaConnection: Functions/Test-PaConnection.md
+  - Update-PaContent: Functions/Update-PaContent.md
+  - Update-PaSoftware: Functions/Update-PaSoftware.md
+  - Watch-PaJob: Functions/Watch-PaJob.md
+repo_url: https://github.com/zloeber/poweralto
+

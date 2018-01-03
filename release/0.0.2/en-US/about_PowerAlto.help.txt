@@ -1,0 +1,17 @@
+TOPIC
+    about_PowerAlto
+
+SHORT DESCRIPTION
+    Several functions for interfacing with the XLM interface of Palo Alto firewalls.
+
+LONG DESCRIPTION
+    Several functions for interfacing with the XLM interface of Palo Alto firewalls.
+
+EXAMPLES
+    TBD
+
+KEYWORDS
+    PaloAlto,Firewall,XMLAPI,REST
+
+SEE ALSO
+    https://github.com/zloeber/poweralto
